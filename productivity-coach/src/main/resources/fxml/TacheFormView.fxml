@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.productivitycoach.ui.controllers.TacheFormController"
+      spacing="20" styleClass="form-dialog">
+    <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
+
+    <Label text="Nouvelle tâche" styleClass="dialog-title"/>
+
+    <VBox spacing="6">
+        <Label text="Titre *" styleClass="field-label"/>
+        <TextField fx:id="titreField" promptText="Ex : Réviser le chapitre JDBC"
+                   styleClass="text-field"/>
+    </VBox>
+
+    <VBox spacing="6">
+        <Label text="Description" styleClass="field-label"/>
+        <TextArea fx:id="descriptionArea" prefRowCount="3"
+                  promptText="Détails de la tâche..."
+                  styleClass="text-area" wrapText="true"/>
+    </VBox>
+
+    <HBox spacing="16">
+        <VBox spacing="6" HBox.hgrow="ALWAYS">
+            <Label text="Catégorie *" styleClass="field-label"/>
+            <ComboBox fx:id="categorieCombo" maxWidth="Infinity" styleClass="combo-box"/>
+        </VBox>
+        <VBox spacing="6" HBox.hgrow="ALWAYS">
+            <Label text="Priorité *" styleClass="field-label"/>
+            <ComboBox fx:id="prioriteCombo" maxWidth="Infinity" styleClass="combo-box"/>
+        </VBox>
+    </HBox>
+
+    <HBox spacing="16">
+        <VBox spacing="6" HBox.hgrow="ALWAYS">
+            <Label text="Échéance" styleClass="field-label"/>
+            <DatePicker fx:id="echeancePicker" maxWidth="Infinity" styleClass="date-picker"/>
+        </VBox>
+        <VBox spacing="6" HBox.hgrow="ALWAYS">
+            <Label text="Temps estimé (min)" styleClass="field-label"/>
+            <Spinner fx:id="tempsEstimeSpinner" maxWidth="Infinity" styleClass="spinner"
+                     editable="true"/>
+        </VBox>
+    </HBox>
+
+    <Label fx:id="errorLabel" styleClass="error-label" visible="false" wrapText="true"/>
+
+    <HBox spacing="12">
+        <Button text="💾 Sauvegarder" fx:id="saveButton"
+                onAction="#handleSave"
+                HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                styleClass="btn-primary"/>
+        <Button text="Annuler"
+                onAction="#handleCancel"
+                HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                styleClass="btn-secondary"/>
+    </HBox>
+</VBox>

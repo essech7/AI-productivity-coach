@@ -1,0 +1,250 @@
+@startuml DiagrammeClasses
+!theme plain
+skinparam backgroundColor #0f1117
+skinparam classBackgroundColor #1a1d2e
+skinparam classBorderColor #3b82f6
+skinparam classFontColor #e2e8f0
+skinparam classHeaderBackgroundColor #141624
+skinparam arrowColor #6c3fc5
+skinparam interfaceBackgroundColor #252840
+skinparam interfaceBorderColor #f59e0b
+skinparam abstractClassBorderColor #34d399
+skinparam packageBorderColor #2d3150
+skinparam packageFontColor #94a3b8
+skinparam noteBackgroundColor #252840
+skinparam noteBorderColor #6c3fc5
+
+title AI Productivity Coach — Diagramme de classes
+
+' ═══════════════════════════════════════════════════════════
+'  COUCHE MODÈLE
+' ═══════════════════════════════════════════════════════════
+package "model" #141624 {
+
+    class Utilisateur {
+        - id : int
+        - nom : String
+        - prenom : String
+        - email : String
+        - motDePasse : String
+        - objectifs : String
+        - rythme : RythmeTravail
+        - creeLe : LocalDateTime
+        + getNomComplet() : String
+    }
+
+    enum RythmeTravail {
+        MATIN
+        SOIR
+        FLEXIBLE
+    }
+
+    class Tache {
+        - id : int
+        - utilisateurId : int
+        - titre : String
+        - description : String
+        - priorite : Priorite
+        - etat : Etat
+        - echeance : LocalDate
+        - tempsEstime : int
+        - tempsPasse : int
+        - creeLe : LocalDateTime
+        + getPourcentageCompletion() : int
+        + isEnRetard() : boolean
+    }
+
+    enum Priorite {
+        BASSE
+        MOYENNE
+        HAUTE
+        URGENTE
+    }
+
+    enum Etat {
+        A_FAIRE
+        EN_COURS
+        TERMINEE
+        ANNULEE
+    }
+
+    class Categorie {
+        - id : int
+        - nom : String
+        - couleur : String
+        - icone : String
+    }
+
+    class SousTache {
+        - id : int
+        - tacheId : int
+        - titre : String
+        - terminee : boolean
+        - ordre : int
+    }
+}
+
+' ═══════════════════════════════════════════════════════════
+'  COUCHE DAO  (interface + implémentations)
+' ═══════════════════════════════════════════════════════════
+package "dao" #141624 {
+
+    interface DAO<T> <<interface>> {
+        + insert(entity : T) : int
+        + update(entity : T) : boolean
+        + delete(id : int) : boolean
+        + findById(id : int) : Optional<T>
+        + findAll() : List<T>
+    }
+
+    class UtilisateurDAO {
+        + authentifier(email, mdp) : Optional<Utilisateur>
+        - map(rs : ResultSet) : Utilisateur
+    }
+
+    class TacheDAO {
+        + findByUtilisateur(uid : int) : List<Tache>
+        - map(rs : ResultSet) : Tache
+    }
+
+    class SousTacheDAO {
+        + findByTache(tacheId : int) : List<SousTache>
+    }
+
+    class DAOException <<exception>> {
+        + DAOException(message : String)
+        + DAOException(message : String, cause : Throwable)
+    }
+}
+
+' ═══════════════════════════════════════════════════════════
+'  COUCHE SERVICE (métier)
+' ═══════════════════════════════════════════════════════════
+package "service" #141624 {
+
+    class UtilisateurService {
+        - {static} utilisateurConnecte : Utilisateur
+        + inscrire(...) : Utilisateur
+        + connecter(email, mdp) : Utilisateur
+        + deconnecter() : void
+        + {static} getUtilisateurConnecte() : Utilisateur
+        + mettreAJourProfil(u : Utilisateur) : void
+    }
+
+    class TacheService {
+        + creer(tache : Tache) : Tache
+        + modifier(tache : Tache) : void
+        + supprimer(id : int) : void
+        + getMesTaches() : List<Tache>
+        + getTauxCompletion() : double
+    }
+
+    class GeminiService {
+        - httpClient : OkHttpClient
+        + reformulerObjectif(objectif : String) : String
+        + decomposerTache(titre, desc, jours) : String
+        + proposerPriorites(liste, contexte) : String
+        + genererConseils(stats, rythme) : String
+        - appelerGemini(prompt : String) : String
+        - extraireTexte(json : String) : String
+    }
+}
+
+' ═══════════════════════════════════════════════════════════
+'  COUCHE UTILITAIRES
+' ═══════════════════════════════════════════════════════════
+package "util" #141624 {
+
+    class DatabaseConnection <<singleton>> {
+        - {static} instance : DatabaseConnection
+        - connection : Connection
+        + {static} getInstance() : DatabaseConnection
+        + getConnection() : Connection
+        + testConnection() : void
+        + closeConnection() : void
+    }
+}
+
+package "exception" #141624 {
+    class AppException <<runtimeException>> {
+        + AppException(message : String)
+        + AppException(message : String, cause : Throwable)
+    }
+}
+
+' ═══════════════════════════════════════════════════════════
+'  COUCHE UI (contrôleurs JavaFX)
+' ═══════════════════════════════════════════════════════════
+package "ui.controllers" #141624 {
+
+    class LoginController {
+        + handleLogin(event) : void
+        + handleRegisterLink(event) : void
+    }
+
+    class RegisterController {
+        + handleRegister(event) : void
+        + handleRetourLogin(event) : void
+    }
+
+    class DashboardController {
+        + initialize(url, rb) : void
+        + handleNouvelleTache(event) : void
+        + handleModifierTache(event) : void
+        + handleSupprimerTache(event) : void
+        + handleDemanderIA(event) : void
+        + handleDeconnexion(event) : void
+        - rafraichir() : void
+        - appliquerFiltres() : void
+    }
+
+    class TacheFormController {
+        + initialize(url, rb) : void
+        + setTache(tache : Tache) : void
+        + handleSave(event) : void
+        + handleCancel(event) : void
+    }
+}
+
+' ═══════════════════════════════════════════════════════════
+'  RELATIONS
+' ═══════════════════════════════════════════════════════════
+
+' Modèle
+Utilisateur +-- RythmeTravail
+Tache       +-- Priorite
+Tache       +-- Etat
+Tache       "1" *-- "0..*" SousTache : contient
+Tache       "0..*" --> "1" Categorie : appartient à
+Utilisateur "1" o-- "0..*" Tache     : possède
+
+' DAO implémentent l'interface
+DAO         <|.. UtilisateurDAO
+DAO         <|.. TacheDAO
+DAO         <|.. SousTacheDAO
+
+' DAO utilisent les modèles
+UtilisateurDAO ..> Utilisateur
+TacheDAO       ..> Tache
+SousTacheDAO   ..> SousTache
+DAO            ..> DAOException : throws
+
+' Services utilisent DAO
+UtilisateurService --> UtilisateurDAO
+TacheService       --> TacheDAO
+UtilisateurService ..> AppException : throws
+TacheService       ..> AppException : throws
+
+' DAO utilisent DatabaseConnection
+UtilisateurDAO --> DatabaseConnection
+TacheDAO       --> DatabaseConnection
+
+' Contrôleurs utilisent services
+LoginController      --> UtilisateurService
+RegisterController   --> UtilisateurService
+DashboardController  --> TacheService
+DashboardController  --> UtilisateurService
+DashboardController  --> GeminiService
+TacheFormController  --> TacheService
+
+@enduml

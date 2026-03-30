@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.productivitycoach.ui.controllers.DashboardController"
+            styleClass="dashboard-root">
+
+    <!-- ══ SIDEBAR ══════════════════════════════════════════════════════════ -->
+    <left>
+        <VBox styleClass="sidebar" spacing="8" prefWidth="220">
+            <padding><Insets top="30" right="16" bottom="30" left="16"/></padding>
+
+            <Label text="⚡" styleClass="sidebar-logo"/>
+            <Label text="AI Coach" styleClass="sidebar-app-name"/>
+            <Separator styleClass="sidebar-sep"/>
+
+            <Button text="📋  Mes tâches"  maxWidth="Infinity" styleClass="sidebar-btn-active"/>
+            <Button text="📅  Calendrier"  maxWidth="Infinity" styleClass="sidebar-btn"/>
+            <Button text="📊  Statistiques" maxWidth="Infinity" styleClass="sidebar-btn"/>
+            <Button text="🤖  Assistant IA" maxWidth="Infinity" styleClass="sidebar-btn"/>
+            <Button text="👤  Profil"       maxWidth="Infinity" styleClass="sidebar-btn"/>
+
+            <VBox VBox.vgrow="ALWAYS"/>
+            <Button text="🚪  Déconnexion"
+                    onAction="#handleDeconnexion"
+                    maxWidth="Infinity"
+                    styleClass="sidebar-btn-danger"/>
+        </VBox>
+    </left>
+
+    <!-- ══ CONTENU PRINCIPAL ════════════════════════════════════════════════ -->
+    <center>
+        <VBox styleClass="main-content" spacing="20">
+            <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
+
+            <!-- Bienvenue -->
+            <Label fx:id="labelBienvenue" styleClass="page-title"/>
+
+            <!-- ── Statistiques ─────────────────────────────────────────── -->
+            <HBox spacing="16">
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="TÂCHES TOTALES" styleClass="stat-label"/>
+                    <Label fx:id="labelTotalTaches" text="0" styleClass="stat-value"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="TERMINÉES" styleClass="stat-label"/>
+                    <Label fx:id="labelTerminees" text="0" styleClass="stat-value-green"/>
+                </VBox>
+                <VBox styleClass="stat-card stat-card-wide" HBox.hgrow="ALWAYS">
+                    <Label text="TAUX DE COMPLÉTION" styleClass="stat-label"/>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label fx:id="labelTauxCompletion" text="0%" styleClass="stat-value"/>
+                        <ProgressBar fx:id="progressCompletion" progress="0"
+                                     HBox.hgrow="ALWAYS" styleClass="progress-bar-custom"/>
+                    </HBox>
+                </VBox>
+            </HBox>
+
+            <!-- ── Barre d'outils tâches ────────────────────────────────── -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Button text="+ Nouvelle tâche"
+                        onAction="#handleNouvelleTache"
+                        styleClass="btn-primary"/>
+                <Button text="✏ Modifier"
+                        onAction="#handleModifierTache"
+                        styleClass="btn-secondary"/>
+                <Button text="🗑 Supprimer"
+                        onAction="#handleSupprimerTache"
+                        styleClass="btn-danger"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="Filtrer :" styleClass="field-label"/>
+                <ComboBox fx:id="comboFiltreEtat" styleClass="combo-box"/>
+                <ComboBox fx:id="comboFiltrePriorite" styleClass="combo-box"/>
+            </HBox>
+
+            <!-- ── Tableau des tâches ────────────────────────────────────── -->
+            <TableView fx:id="tableTaches" VBox.vgrow="ALWAYS"
+                       styleClass="task-table" placeholder="&lt;Label text='Aucune tâche. Créez-en une !'&gt;">
+                <columns>
+                    <TableColumn fx:id="colTitre"     text="Titre"      prefWidth="250"/>
+                    <TableColumn fx:id="colCategorie" text="Catégorie"  prefWidth="110"/>
+                    <TableColumn fx:id="colPriorite"  text="Priorité"   prefWidth="100"/>
+                    <TableColumn fx:id="colEtat"      text="État"       prefWidth="110"/>
+                    <TableColumn fx:id="colEcheance"  text="Échéance"   prefWidth="110"/>
+                </columns>
+            </TableView>
+
+            <!-- ── Section IA ────────────────────────────────────────────── -->
+            <TitledPane text="🤖 Assistant IA — Gemini" styleClass="ia-pane">
+                <VBox spacing="12">
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <ComboBox fx:id="comboTypeIA" prefWidth="260" styleClass="combo-box"/>
+                        <ProgressIndicator fx:id="progressIA" prefSize="24"/>
+                    </HBox>
+                    <HBox spacing="12">
+                        <VBox HBox.hgrow="ALWAYS" spacing="6">
+                            <Label text="Votre demande :" styleClass="field-label"/>
+                            <TextArea fx:id="iaInputArea" prefRowCount="4"
+                                      promptText="Ex : Préparer l'examen Java en 7 jours..."
+                                      styleClass="text-area" wrapText="true"/>
+                        </VBox>
+                        <VBox HBox.hgrow="ALWAYS" spacing="6">
+                            <Label text="Réponse de l'IA :" styleClass="field-label"/>
+                            <TextArea fx:id="iaOutputArea" prefRowCount="4"
+                                      editable="false" wrapText="true"
+                                      styleClass="text-area ia-output"/>
+                        </VBox>
+                    </HBox>
+                    <Button fx:id="btnDemanderIA" text="✨ Demander à l'IA"
+                            onAction="#handleDemanderIA"
+                            styleClass="btn-ia"/>
+                </VBox>
+            </TitledPane>
+
+        </VBox>
+    </center>
+</BorderPane>

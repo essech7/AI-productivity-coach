@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<ScrollPane fitToWidth="true" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.productivitycoach.ui.controllers.RegisterController">
+    <VBox alignment="CENTER" spacing="0" maxWidth="480"
+          style="-fx-padding: 40 0;" styleClass="card-login">
+
+        <VBox alignment="CENTER" spacing="8" styleClass="card-header">
+            <Label text="⚡" styleClass="logo-icon"/>
+            <Label text="Créer un compte" styleClass="app-title"/>
+            <Label text="Rejoignez AI Productivity Coach" styleClass="subtitle"/>
+        </VBox>
+
+        <VBox spacing="14" styleClass="form-body">
+            <HBox spacing="12">
+                <VBox spacing="6" HBox.hgrow="ALWAYS">
+                    <Label text="Prénom" styleClass="field-label"/>
+                    <TextField fx:id="prenomField" promptText="Votre prénom"
+                               styleClass="text-field"/>
+                </VBox>
+                <VBox spacing="6" HBox.hgrow="ALWAYS">
+                    <Label text="Nom" styleClass="field-label"/>
+                    <TextField fx:id="nomField" promptText="Votre nom"
+                               styleClass="text-field"/>
+                </VBox>
+            </HBox>
+
+            <VBox spacing="6">
+                <Label text="Email" styleClass="field-label"/>
+                <TextField fx:id="emailField" promptText="vous@exemple.com"
+                           styleClass="text-field"/>
+            </VBox>
+
+            <HBox spacing="12">
+                <VBox spacing="6" HBox.hgrow="ALWAYS">
+                    <Label text="Mot de passe" styleClass="field-label"/>
+                    <PasswordField fx:id="passwordField" promptText="Min. 6 caractères"
+                                  styleClass="text-field"/>
+                </VBox>
+                <VBox spacing="6" HBox.hgrow="ALWAYS">
+                    <Label text="Confirmer" styleClass="field-label"/>
+                    <PasswordField fx:id="confirmPasswordField" promptText="Répéter"
+                                  styleClass="text-field"/>
+                </VBox>
+            </HBox>
+
+            <VBox spacing="6">
+                <Label text="Rythme de travail préféré" styleClass="field-label"/>
+                <ComboBox fx:id="rythmeCombo" maxWidth="Infinity"
+                          styleClass="combo-box"/>
+            </VBox>
+
+            <VBox spacing="6">
+                <Label text="Mes objectifs (optionnel)" styleClass="field-label"/>
+                <TextArea fx:id="objectifsArea" promptText="Ex : Réussir ma 2ème année, finir mon projet..."
+                          prefRowCount="3" styleClass="text-area"/>
+            </VBox>
+
+            <Label fx:id="errorLabel" styleClass="error-label"
+                   visible="false" wrapText="true"/>
+
+            <Button text="Créer mon compte"
+                    fx:id="registerButton"
+                    onAction="#handleRegister"
+                    maxWidth="Infinity"
+                    styleClass="btn-primary"/>
+
+            <Button text="← Retour à la connexion"
+                    onAction="#handleRetourLogin"
+                    maxWidth="Infinity"
+                    styleClass="btn-secondary"/>
+        </VBox>
+    </VBox>
+</ScrollPane>

@@ -1,0 +1,93 @@
+@startuml DiagrammeCasUtilisation
+!theme plain
+skinparam backgroundColor #0f1117
+skinparam actorBackgroundColor #1a1d2e
+skinparam actorBorderColor #6c3fc5
+skinparam actorFontColor #e2e8f0
+skinparam usecaseBackgroundColor #1a1d2e
+skinparam usecaseBorderColor #3b82f6
+skinparam usecaseFontColor #e2e8f0
+skinparam arrowColor #64748b
+skinparam packageBorderColor #2d3150
+skinparam packageFontColor #94a3b8
+skinparam packageBackgroundColor #141624
+skinparam noteBackgroundColor #252840
+skinparam noteBorderColor #6c3fc5
+
+title AI Productivity Coach — Diagramme des cas d'utilisation
+
+actor "Utilisateur" as U
+actor "API Gemini (IA)" as IA #6c3fc5
+
+rectangle "AI Productivity Coach" {
+
+    package "Gestion des comptes" {
+        usecase "S'inscrire"              as UC1
+        usecase "Se connecter"            as UC2
+        usecase "Modifier son profil"     as UC3
+        usecase "Se déconnecter"          as UC4
+    }
+
+    package "Gestion des tâches" {
+        usecase "Créer une tâche"         as UC5
+        usecase "Modifier une tâche"      as UC6
+        usecase "Supprimer une tâche"     as UC7
+        usecase "Consulter ses tâches"    as UC8
+        usecase "Filtrer les tâches"      as UC9
+        usecase "Marquer comme terminée"  as UC10
+    }
+
+    package "Sous-tâches" {
+        usecase "Ajouter une sous-tâche"  as UC11
+        usecase "Cocher une sous-tâche"   as UC12
+    }
+
+    package "Suivi & Statistiques" {
+        usecase "Voir ses statistiques"   as UC13
+        usecase "Consulter l'historique"  as UC14
+    }
+
+    package "Assistant IA" {
+        usecase "Reformuler un objectif"  as UC15
+        usecase "Découper une tâche"      as UC16
+        usecase "Obtenir des priorités"   as UC17
+        usecase "Recevoir des conseils"   as UC18
+    }
+}
+
+' Relations utilisateur
+U --> UC1
+U --> UC2
+U --> UC3
+U --> UC4
+U --> UC5
+U --> UC6
+U --> UC7
+U --> UC8
+U --> UC9
+U --> UC10
+U --> UC11
+U --> UC12
+U --> UC13
+U --> UC14
+U --> UC15
+U --> UC16
+U --> UC17
+U --> UC18
+
+' UC extends / includes
+UC8 ..> UC9  : <<include>>
+UC5 ..> UC11 : <<extend>>
+UC16 ..> UC11 : <<include>>
+
+' IA intervient
+UC15 --> IA
+UC16 --> IA
+UC17 --> IA
+UC18 --> IA
+
+' Notes
+note right of UC2 : Vérification BCrypt\ndu mot de passe
+note right of UC16 : Génère des sous-tâches\nautomatiquement via Gemini
+
+@enduml
