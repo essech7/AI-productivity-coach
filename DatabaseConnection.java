@@ -1,0 +1,20 @@
+package com.coach.app.dao;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class DatabaseConnection {
+    private static final String URL = "jdbc:mysql://localhost:3306/productivity_coach";
+    private static final String USER = "root"; // Valeur par défaut
+    private static final String PASSWORD = ""; // Valeur par défaut
+
+    public static Connection getConnection() throws SQLException {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            return DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (ClassNotFoundException e) {
+            throw new SQLException("Driver MySQL non trouvé.", e);
+        }
+    }
+}

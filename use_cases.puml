@@ -1,0 +1,32 @@
+@startuml
+left to right direction
+actor "Utilisateur (Étudiant/Pro)" as User
+actor "API Gemini (IA)" as AI
+
+rectangle "Coach Intelligent de Productivité" {
+  usecase "S'inscrire / S'authentifier" as UC1
+  usecase "Gérer ses objectifs" as UC2
+  usecase "Ajouter/Modifier une tâche" as UC3
+  usecase "Suivre son temps de travail" as UC4
+  usecase "Visualiser les statistiques" as UC5
+  
+  usecase "Reformuler un objectif (SMART)" as UC6
+  usecase "Découper une tâche complexe" as UC7
+  usecase "Obtenir des conseils de planification" as UC8
+}
+
+User --> UC1
+User --> UC2
+User --> UC3
+User --> UC4
+User --> UC5
+
+User --> UC6
+User --> UC7
+User --> UC8
+
+UC6 <-- AI
+UC7 <-- AI
+UC8 <-- AI
+
+@enduml

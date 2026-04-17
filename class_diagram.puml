@@ -1,0 +1,69 @@
+@startuml
+
+package com.coach.app.models {
+    class User {
+        - id: int
+        - username: String
+        - password: String
+        - preferences: String
+        - goals: String
+        + getters()
+        + setters()
+    }
+
+    class Task {
+        - id: int
+        - title: String
+        - description: String
+        - userId: int
+        - category: String
+        - priority: String
+        - deadline: LocalDate
+        - status: String
+        + getters()
+        + setters()
+    }
+    
+    User "1" *-- "*" Task : possède
+}
+
+package com.coach.app.dao {
+    class DatabaseConnection {
+        {static} + getConnection(): Connection
+    }
+
+    class UserDAO {
+        + authenticate(username, password): User
+        + register(User): boolean
+    }
+
+    class TaskDAO {
+        + getTasksByUser(userId: int): List<Task>
+        + addTask(Task): boolean
+        + updateTaskStatus(taskId, status): boolean
+    }
+}
+
+package com.coach.app.services {
+    class TaskManagementService {
+        - taskDAO: TaskDAO
+        + getUserTasks(userId: int): List<Task>
+        + createNewTask(Task): boolean
+        + calculateCompletionRate(userId: int): double
+    }
+}
+
+package com.coach.app.ai {
+    class GeminiAiClient {
+        - API_KEY: String
+        + askAi(prompt: String): String
+        + reformulateGoal(goal: String): String
+        + breakdownTask(task: String): String
+    }
+}
+
+TaskManagementService --> TaskDAO
+UserDAO ..> User
+TaskDAO ..> Task
+
+@enduml
